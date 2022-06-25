@@ -124,6 +124,9 @@ CLASS zcl_medapi_tree_model IMPLEMENTATION.
 
     TRY.
         ASSIGN mt_models[ namespace = lv_namespace ] TO FIELD-SYMBOL(<ls_model>).
+        IF sy-subrc <> 0.
+          RAISE EXCEPTION TYPE cx_sy_itab_line_not_found.
+        ENDIF.
       CATCH cx_sy_itab_line_not_found.
         IF <ls_model> IS ASSIGNED.
           UNASSIGN <ls_model>.
@@ -187,7 +190,7 @@ CLASS zcl_medapi_tree_model IMPLEMENTATION.
     DATA(lv_node_icon) = SWITCH tv_image( iv_namespace WHEN gc_gns_sap_all THEN `ICON_SAP`
                                                        WHEN gc_gns_cust
                                                          OR space          THEN `ICON_CUSTOMER`
-                                                                          ELSE `ICON_PARTNER` ).
+                                                                           ELSE `ICON_PARTNER` ).
 
     ri_result = cl_ish_gm_table_simple=>create( i_node_text = lv_node_text i_node_icon = lv_node_icon ).
 

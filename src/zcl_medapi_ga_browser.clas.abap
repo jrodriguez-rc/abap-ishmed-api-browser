@@ -187,10 +187,11 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
 
         create_model( ).
 
-        DATA(lr_layout) = COND #( WHEN ir_layout IS BOUND THEN ir_layout
-                                                          ELSE NEW #( i_use_msg_viewer = abap_true ) ).
+        DATA(lo_layout) =
+          COND #( WHEN ir_layout IS BOUND THEN ir_layout
+                                          ELSE NEW cl_ish_gui_appl_layout( i_use_msg_viewer = abap_true ) ).
 
-        super->_init_appl( i_vcode = i_vcode ir_layout = lr_layout ).
+        super->_init_appl( i_vcode = i_vcode ir_layout = lo_layout ).
 
       CLEANUP.
 
