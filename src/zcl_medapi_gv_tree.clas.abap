@@ -4,17 +4,17 @@ CLASS zcl_medapi_gv_tree DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    CONSTANTS co_def_planhierarchy_ctrname TYPE n1gui_element_name VALUE 'PLANHIERARCHY_CTR'. "#EC NOTEXT
-    CONSTANTS co_def_planhierarchy_viewname TYPE n1gui_element_name VALUE 'PLANHIERARCHY_VIEW'. "#EC NOTEXT
+    CONSTANTS co_def_tree_ctrname TYPE n1gui_element_name VALUE 'CTR_TREE'.
+    CONSTANTS co_def_tree_viewname TYPE n1gui_element_name VALUE 'VIEW_TREE'.
 
     CLASS-METHODS create_and_init_by_contview
       IMPORTING
-        iv_element_name    TYPE n1gui_element_name DEFAULT co_def_planhierarchy_viewname
+        iv_element_name    TYPE n1gui_element_name DEFAULT co_def_tree_viewname
         ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable OPTIONAL
         ii_model           TYPE REF TO if_ish_gui_model
         io_layout          TYPE REF TO cl_ish_gui_tree_layout OPTIONAL
-        iv_processing_mode TYPE ish_vcode DEFAULT co_vcode_display
-        iv_ctrname         TYPE n1gui_element_name DEFAULT co_def_planhierarchy_ctrname
+        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
+        iv_ctrname         TYPE n1gui_element_name DEFAULT co_def_tree_ctrname
         ii_parent_view     TYPE REF TO if_ish_gui_container_view
       RETURNING
         VALUE(ro_result)   TYPE REF TO zcl_medapi_gv_tree
@@ -27,7 +27,7 @@ CLASS zcl_medapi_gv_tree DEFINITION
         ii_controller      TYPE REF TO if_ish_gui_controller
         ii_parent_view     TYPE REF TO if_ish_gui_container_view
         ii_layout          TYPE REF TO cl_ish_gui_tree_layout OPTIONAL
-        iv_processing_mode TYPE ish_vcode DEFAULT co_vcode_display
+        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
       RAISING
         cx_ish_static_handler.
 
@@ -57,7 +57,8 @@ CLASS zcl_medapi_gv_tree IMPLEMENTATION.
 
     ro_result = NEW #( i_element_name = iv_element_name ir_cb_destroyable = ii_cb_destroyable ).
 
-    lr_ctr->initialize( ir_parent_controller = COND #( WHEN ii_parent_view IS BOUND THEN ii_parent_view->get_controller( ) )
+    lr_ctr->initialize( ir_parent_controller = COND #( WHEN ii_parent_view IS BOUND
+                                                           THEN ii_parent_view->get_controller( ) )
                         ir_model             = ii_model
                         ir_view              = ro_result
                         i_vcode              = iv_processing_mode ).
@@ -71,9 +72,6 @@ CLASS zcl_medapi_gv_tree IMPLEMENTATION.
 
 
   METHOD initialize.
-
-    DATA:
-      l_system_client_edit  TYPE cccoractiv.
 
     IF is_initialized( ) OR is_in_initialization_mode( ).
       cl_ish_utl_exception=>raise_static( i_typ = 'E'

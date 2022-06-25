@@ -38,7 +38,7 @@ CLASS zcl_medapi_tree_model DEFINITION
         iv_namespace     TYPE namespace
         iv_class_name    TYPE seoclsname OPTIONAL
       RETURNING
-        VALUE(rr_result) TYPE REF TO if_ish_gui_table_model.
+        VALUE(ri_result) TYPE REF TO if_ish_gui_table_model.
 
     METHODS on_entry_added
         FOR EVENT ev_entry_added OF if_ish_gui_table_model
@@ -157,11 +157,11 @@ CLASS zcl_medapi_tree_model IMPLEMENTATION.
 
     CASE iv_namespace.
       WHEN gc_gns_cust OR space.
-        DATA(l_node_text) = CONV lvc_value( 'Customer'(002) ).
+        DATA(lv_node_text) = CONV lvc_value( 'Customer'(002) ).
 
       WHEN gc_gns_sap_all.
-        l_node_text = COND #( WHEN iv_class_name CS `ISHMED` THEN |i.s.h.med ({ 'By'(001) } Cerner)|
-                                                             ELSE |IS-H ({ 'By'(001) } SAP)| ).
+        lv_node_text = COND #( WHEN iv_class_name CS `ISHMED` THEN |i.s.h.med ({ 'By'(001) } Cerner)|
+                                                              ELSE |IS-H ({ 'By'(001) } SAP)| ).
 
       WHEN OTHERS.
 
@@ -174,24 +174,25 @@ CLASS zcl_medapi_tree_model IMPLEMENTATION.
           CLEAR ls_text.
         ENDIF.
 
-        l_node_text =
+        lv_node_text =
             COND #(
-                LET l_description = COND #( WHEN ls_text-descriptn IS NOT INITIAL THEN ls_text-descriptn ELSE iv_namespace ) IN
+                LET l_description = COND #( WHEN ls_text-descriptn IS NOT INITIAL THEN ls_text-descriptn
+                                                                                  ELSE iv_namespace ) IN
                 WHEN ls_text-owner IS INITIAL AND iv_namespace <> gc_gns_cust
                     THEN l_description
                     ELSE |{ l_description } ({ 'By'(001) } { ls_text-owner })| ).
 
     ENDCASE.
 
-    DATA(l_node_icon) = SWITCH tv_image( iv_namespace WHEN gc_gns_sap_all THEN `ICON_SAP`
-                                                      WHEN gc_gns_cust
-                                                        OR space          THEN `ICON_CUSTOMER`
+    DATA(lv_node_icon) = SWITCH tv_image( iv_namespace WHEN gc_gns_sap_all THEN `ICON_SAP`
+                                                       WHEN gc_gns_cust
+                                                         OR space          THEN `ICON_CUSTOMER`
                                                                           ELSE `ICON_PARTNER` ).
 
-    rr_result = cl_ish_gm_table_simple=>create( i_node_text = l_node_text i_node_icon = l_node_icon ).
+    ri_result = cl_ish_gm_table_simple=>create( i_node_text = lv_node_text i_node_icon = lv_node_icon ).
 
-    SET HANDLER on_entry_added FOR rr_result ACTIVATION abap_true.
-    SET HANDLER on_entry_removed FOR rr_result ACTIVATION abap_true.
+    SET HANDLER on_entry_added FOR ri_result ACTIVATION abap_true.
+    SET HANDLER on_entry_removed FOR ri_result ACTIVATION abap_true.
 
   ENDMETHOD.
 

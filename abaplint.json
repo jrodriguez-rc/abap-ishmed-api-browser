@@ -18,9 +18,9 @@
             "files": "/src/**/*.*"
         },
         {
-            "url": "https://github.com/jrodriguez-rc/abap-deps-ishdeps",
+            "url": "https://github.com/jrodriguez-rc/abap-deps-ish",
             "folder": "/deps-ish",
-            "files": "/src/*.*"
+            "files": "/src/**/*.*"
         }
     ],
     "rules": {
