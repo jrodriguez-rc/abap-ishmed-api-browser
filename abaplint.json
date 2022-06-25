@@ -13,9 +13,14 @@
     },
     "dependencies": [
         {
-            "url": "https://github.com/jrodriguez-rc/abap-deps",
+            "url": "https://github.com/abaplint/deps",
             "folder": "/deps",
             "files": "/src/**/*.*"
+        },
+        {
+            "url": "https://github.com/jrodriguez-rc/abap-deps-ishdeps",
+            "folder": "/deps-ish",
+            "files": "/src/*.*"
         }
     ],
     "rules": {
