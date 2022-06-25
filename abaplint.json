@@ -1,0 +1,310 @@
+{
+    "global": {
+        "files": "/src/**/*.*",
+        "skipGeneratedGatewayClasses": true,
+        "skipGeneratedPersistentClasses": true,
+        "skipGeneratedFunctionGroups": true
+    },
+    "syntax": {
+        "version": "v740sp08",
+        "errorNamespace": "Z",
+        "globalConstants": [],
+        "globalMacros": []
+    },
+    "dependencies": [
+        {
+            "url": "https://github.com/jrodriguez-rc/abap-deps",
+            "folder": "/deps",
+            "files": "/src/**/*.*"
+        }
+    ],
+    "rules": {
+        "7bit_ascii": true,
+        "avoid_use": {
+            "define": true,
+            "statics": true,
+            "break": true,
+            "defaultKey": true,
+            "testSeams": true,
+            "describeLines": true
+        },
+        "check_syntax": true,
+        "class_attribute_names": {
+            "ignoreExceptions": true,
+            "statics": "^G._.*$",
+            "instance": "^M._.*$",
+            "constants": "^C._.*$",
+            "ignoreLocal": false,
+            "ignoreInterfaces": false
+        },
+        "cloud_types": true,
+        "colon_missing_space": true,
+        "commented_code": true,
+        "constructor_visibility_public": true,
+        "contains_tab": true,
+        "definitions_top": true,
+        "description_empty": true,
+        "double_space": {
+            "keywords": true,
+            "startParen": true,
+            "endParen": true,
+            "afterColon": true
+        },
+        "empty_line_in_statement": {
+            "allowChained": false
+        },
+        "empty_statement": true,
+        "empty_structure": {
+            "loop": true,
+            "if": true,
+            "while": true,
+            "case": true,
+            "select": true,
+            "do": true,
+            "at": true,
+            "try": true,
+            "when": true
+        },
+        "exit_or_check": true,
+        "exporting": true,
+        "functional_writing": {
+            "ignoreExceptions": true
+        },
+        "global_class": true,
+        "identical_form_names": true,
+        "if_in_if": true,
+        "in_statement_indentation": {
+            "ignoreExceptions": true,
+            "blockStatements": 0
+        },
+        "indentation": {
+            "ignoreExceptions": true,
+            "alignTryCatch": false,
+            "globalClassSkipFirst": false,
+            "ignoreGlobalClassDefinition": false,
+            "ignoreGlobalInterface": false,
+            "selectionScreenBlockIndentation": false
+        },
+        "inline_data_old_versions": true,
+        "keyword_case": {
+            "style": "upper",
+            "ignoreExceptions": true,
+            "ignoreLowerClassImplmentationStatement": true,
+            "ignoreGlobalClassDefinition": false,
+            "ignoreGlobalInterface": false,
+            "ignoreFunctionModuleName": false,
+            "ignoreGlobalClassBoundaries": true,
+            "ignoreKeywords": []
+        },
+        "line_length": {
+            "length": 120
+        },
+        "line_only_punc": {
+            "ignoreExceptions": true
+        },
+        "local_class_naming": {
+            "local": "^LCL_.*$",
+            "test": "^LTCL_.*$",
+            "exception": "^LCX_.*$"
+        },
+        "local_variable_names": {
+            "expectedData": "^L._.*$",
+            "expectedConstant": "^LC_.*$",
+            "expectedFS": "^<L._.*>$"
+        },
+        "max_one_statement": true,
+        "message_exists": true,
+        "method_length": {
+            "statements": 100,
+            "ignoreTestClasses": false,
+            "errorWhenEmpty": true,
+            "checkForms": true
+        },
+        "method_parameter_names": {
+            "ignoreExceptions": true,
+            "importing": "^I._.*$",
+            "returning": "^R._.*$",
+            "changing": "^C._.*$",
+            "exporting": "^E._.*$",
+            "ignoreNames": [
+                "P_TASK"
+            ]
+        },
+        "mix_returning": true,
+        "msag_consistency": true,
+        "nesting": {
+            "depth": 5
+        },
+        "no_public_attributes": {
+            "allowReadOnly": true,
+            "ignoreTestClasses": false
+        },
+        "object_naming": {
+            "clas": "^ZC(L|X)\\_",
+            "intf": "^ZIF\\_",
+            "prog": "^Z",
+            "fugr": "^Z",
+            "tabl": "^Z",
+            "ttyp": "^Z",
+            "dtel": "^Z",
+            "doma": "^Z",
+            "msag": "^Z",
+            "tran": "^Z",
+            "enqu": "^EZ",
+            "auth": "^Z",
+            "pinf": "^Z",
+            "idoc": "^Z",
+            "xslt": "^Z",
+            "shlp": "^Z",
+            "ssfo": "^Z",
+            "ssst": "^Z"
+        },
+        "obsolete_statement": {
+            "refresh": true,
+            "compute": true,
+            "add": true,
+            "subtract": true,
+            "multiply": true,
+            "move": true,
+            "divide": true,
+            "requested": true,
+            "occurs": true,
+            "setExtended": true,
+            "withHeaderLine": true,
+            "fieldSymbolStructure": true,
+            "callTransformation": true,
+            "communication": true,
+            "exitFromSQL": true,
+            "freeMemory": true,
+            "load": true,
+            "occurences": true,
+            "pack": true,
+            "parameter": true,
+            "ranges": true,
+            "regex": true,
+            "selectWithoutInto": true,
+            "sortByFS": true,
+            "typePools": true
+        },
+        "parser_error": true,
+        "preferred_compare_operator": {
+            "badOperators": [
+                "EQ",
+                "><",
+                "NE",
+                "GE",
+                "GT",
+                "LT",
+                "LE"
+            ]
+        },
+        "remove_descriptions": {
+            "ignoreExceptions": false,
+            "ignoreWorkflow": true
+        },
+        "sequential_blank": {
+            "lines": 4
+        },
+        "short_case": {
+            "length": 1,
+            "allow": []
+        },
+        "space_before_colon": true,
+        "space_before_dot": {
+            "ignoreGlobalDefinition": true,
+            "ignoreExceptions": true
+        },
+        "start_at_tab": true,
+        "superclass_final": false,
+        "tabl_enhancement_category": true,
+        "unreachable_code": true,
+        "use_new": true,
+        "when_others_last": true,
+        "whitespace_end": true,
+        "ambiguous_statement": true,
+        "allowed_object_types": {
+            "allowed": [
+                "PROG",
+                "CLAS",
+                "INTF",
+                "FUGR",
+                "TABL",
+                "TTYP",
+                "SHLP",
+                "DEVC"
+            ]
+        },
+        "begin_end_names": true,
+        "check_transformation_exists": true,
+        "form_tables_obsolete": true,
+        "implement_methods": true,
+        "main_file_contents": true,
+        "type_form_parameters": true,
+        "rfc_error_handling": true,
+        "abapdoc": false,
+        "release_idoc": true,
+        "prefer_returning_to_exporting": true,
+        "keep_single_parameter_on_one_line": {
+            "length": 120
+        },
+        "allowed_object_naming": true,
+        "chain_mainly_declarations": true,
+        "fully_type_constants": true,
+        "check_abstract": true,
+        "check_comments": {
+            "allowEndOfLine": true
+        },
+        "selection_screen_naming": {
+            "selectOption": "^s_.+$",
+            "parameter": "^p_.+$",
+            "patternKind": "required",
+            "screenElement": ""
+        },
+        "check_text_elements": true,
+        "check_ddic": true,
+        "newline_between_methods": {
+            "logic": "less",
+            "count": 3
+        },
+        "check_include": true,
+        "xml_consistency": true,
+        "prefix_is_current_class": {
+            "omitMeInstanceCalls": true
+        },
+        "line_break_multiple_parameters": false,
+        "forbidden_identifier": {
+            "check": [],
+            "exclude": []
+        },
+        "forbidden_void_type": true,
+        "prefer_inline": true,
+        "reduce_string_templates": true,
+        "sicf_consistency": true,
+        "sql_escape_host_variables": true,
+        "try_without_catch": true,
+        "types_naming": {
+            "pattern": "^T._.*$"
+        },
+        "unknown_types": true,
+        "unused_variables": true,
+        "begin_single_include": true,
+        "check_subrc": true,
+        "cyclomatic_complexity":{
+            "max": 6
+        },
+        "forbidden_pseudo_and_pragma": {
+            "ignoreGlobalClassDefinition": false,
+            "ignoreGlobalInterface": false,
+            "pragmas": ["##NO_TEXT"],
+            "pseudo": ["#EC NOTEXT"]
+          },
+          "identical_conditions": true,
+          "line_break_style": true,
+          "names_no_dash": true,
+          "parser_missing_space": true,
+          "prefer_is_not": true,
+          "unused_types":true,
+          "use_bool_expression": true,
+          "use_line_exists": true
+    }
+}
