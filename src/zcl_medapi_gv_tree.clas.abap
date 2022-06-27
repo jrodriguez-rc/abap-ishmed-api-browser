@@ -4,17 +4,17 @@ CLASS zcl_medapi_gv_tree DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    CONSTANTS co_def_tree_ctrname TYPE n1gui_element_name VALUE 'CTR_TREE'.
-    CONSTANTS co_def_tree_viewname TYPE n1gui_element_name VALUE 'VIEW_TREE'.
+    CONSTANTS gc_def_tree_ctrname TYPE n1gui_element_name VALUE 'CTR_TREE'.
+    CONSTANTS gc_def_tree_viewname TYPE n1gui_element_name VALUE 'VIEW_TREE'.
 
     CLASS-METHODS create_and_init_by_contview
       IMPORTING
-        iv_element_name    TYPE n1gui_element_name DEFAULT co_def_tree_viewname
+        iv_element_name    TYPE n1gui_element_name DEFAULT gc_def_tree_viewname
         ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable OPTIONAL
         ii_model           TYPE REF TO if_ish_gui_model
         io_layout          TYPE REF TO cl_ish_gui_tree_layout OPTIONAL
         iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
-        iv_ctrname         TYPE n1gui_element_name DEFAULT co_def_tree_ctrname
+        iv_ctrname         TYPE n1gui_element_name DEFAULT gc_def_tree_ctrname
         ii_parent_view     TYPE REF TO if_ish_gui_container_view
       RETURNING
         VALUE(ro_result)   TYPE REF TO zcl_medapi_gv_tree

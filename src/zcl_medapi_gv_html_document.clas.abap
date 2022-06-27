@@ -68,9 +68,9 @@ CLASS zcl_medapi_gv_html_document DEFINITION
 
   PRIVATE SECTION.
     DATA:
-      gv_document_object TYPE doku_obj,
-      gv_document_class  TYPE doku_id,
-      go_html_viewer     TYPE REF TO cl_epss_html_viewer.
+      mv_document_object TYPE doku_obj,
+      mv_document_class  TYPE doku_id,
+      mo_html_viewer     TYPE REF TO cl_epss_html_viewer.
 
 ENDCLASS.
 
@@ -126,8 +126,8 @@ CLASS zcl_medapi_gv_html_document IMPLEMENTATION.
 
     load_document( iv_document_object = iv_document_object iv_document_class = iv_document_class ).
 
-    gv_document_object = iv_document_object.
-    gv_document_class  = iv_document_class.
+    mv_document_object = iv_document_object.
+    mv_document_class  = iv_document_class.
 
   ENDMETHOD.
 
@@ -144,30 +144,32 @@ CLASS zcl_medapi_gv_html_document IMPLEMENTATION.
         CLEAR lo_html_viewer.
     ENDTRY.
     IF lo_html_viewer IS NOT BOUND.
-      cl_ish_utl_exception=>raise_static( i_typ = 'E'
-                                          i_kla = 'N1BASE'
-                                          i_num = '030'
-                                          i_mv1 = '1'
-                                          i_mv2 = 'DISPLAY_DOCUMENT'
-                                          i_mv3 = 'ZCL_MEDAPI_GV_HTML_DOCUMENT' ).
+      RAISE EXCEPTION TYPE zcx_medapi
+        EXPORTING
+          is_textid = zcx_medapi=>msg_method_error
+          iv_text1  = '1'
+          iv_text2  = 'DISPLAY_DOCUMENT'
+          iv_text3  = 'ZCL_MEDAPI_GV_HTML_DOCUMENT'.
     ENDIF.
 
     lo_html_viewer->stop( EXCEPTIONS cntl_error = 1
                                      OTHERS     = 2 ).
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE zcx_medapi
-        MESSAGE ID sy-msgid
-        TYPE sy-msgty
-        NUMBER sy-msgno
-        WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+        EXPORTING
+          is_textid = zcx_medapi=>get_system_textid( )
+          iv_text1  = CONV #( sy-msgv1 )
+          iv_text2  = CONV #( sy-msgv2 )
+          iv_text3  = CONV #( sy-msgv3 )
+          iv_text4  = CONV #( sy-msgv4 ).
     ENDIF.
 
     IF iv_document_class IS NOT INITIAL AND iv_document_object IS NOT INITIAL.
       DATA(lv_document_object) = iv_document_object.
       DATA(lv_document_class)  = iv_document_class.
     ELSE.
-      lv_document_object = gv_document_object.
-      lv_document_class  = gv_document_class.
+      lv_document_object = mv_document_object.
+      lv_document_class  = mv_document_class.
     ENDIF.
 
     CALL FUNCTION 'DOC_OBJECT_GET_HTML'
@@ -181,10 +183,12 @@ CLASS zcl_medapi_gv_html_document IMPLEMENTATION.
         OTHERS               = 2.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE zcx_medapi
-        MESSAGE ID sy-msgid
-        TYPE sy-msgty
-        NUMBER sy-msgno
-        WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+        EXPORTING
+          is_textid = zcx_medapi=>get_system_textid( )
+          iv_text1  = CONV #( sy-msgv1 )
+          iv_text2  = CONV #( sy-msgv2 )
+          iv_text3  = CONV #( sy-msgv3 )
+          iv_text4  = CONV #( sy-msgv4 ).
     ENDIF.
 
     lo_html_viewer->load_data( IMPORTING  assigned_url         = lv_url
@@ -195,10 +199,12 @@ CLASS zcl_medapi_gv_html_document IMPLEMENTATION.
                                           OTHERS               = 4 ).
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE zcx_medapi
-        MESSAGE ID sy-msgid
-        TYPE sy-msgty
-        NUMBER sy-msgno
-        WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+        EXPORTING
+          is_textid = zcx_medapi=>get_system_textid( )
+          iv_text1  = CONV #( sy-msgv1 )
+          iv_text2  = CONV #( sy-msgv2 )
+          iv_text3  = CONV #( sy-msgv3 )
+          iv_text4  = CONV #( sy-msgv4 ).
     ENDIF.
 
 
@@ -210,10 +216,12 @@ CLASS zcl_medapi_gv_html_document IMPLEMENTATION.
                                           OTHERS                 = 5 ).
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE zcx_medapi
-        MESSAGE ID sy-msgid
-        TYPE sy-msgty
-        NUMBER sy-msgno
-        WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+        EXPORTING
+          is_textid = zcx_medapi=>get_system_textid( )
+          iv_text1  = CONV #( sy-msgv1 )
+          iv_text2  = CONV #( sy-msgv2 )
+          iv_text3  = CONV #( sy-msgv3 )
+          iv_text4  = CONV #( sy-msgv4 ).
     ENDIF.
 
   ENDMETHOD.
@@ -221,29 +229,30 @@ CLASS zcl_medapi_gv_html_document IMPLEMENTATION.
 
   METHOD initialize.
 
-    IF is_initialized( ) = abap_true OR
-       is_in_initialization_mode( ) = abap_true.
+    IF is_initialized( ) OR is_in_initialization_mode( ).
       RAISE EXCEPTION TYPE zcx_medapi
-        MESSAGE ID 'N1BASE'
-        TYPE 'E'
-        NUMBER '030'
-        WITH '1' 'INITIALIZE' 'ZCL_MEDAPI_GV_HTML_DOCUMENT'.
+        EXPORTING
+          is_textid = zcx_medapi=>msg_method_error
+          iv_text1  = '1'
+          iv_text2  = 'INITIALIZE'
+          iv_text3  = 'ZCL_MEDAPI_GV_HTML_DOCUMENT'.
     ENDIF.
 
     IF ii_controller IS NOT BOUND.
       RAISE EXCEPTION TYPE zcx_medapi
-        MESSAGE ID 'N1BASE'
-        TYPE 'E'
-        NUMBER '030'
-        WITH '2' 'INITIALIZE' 'ZCL_MEDAPI_GV_HTML_DOCUMENT'.
+        EXPORTING
+          is_textid = zcx_medapi=>msg_method_error
+          iv_text1  = '2'
+          iv_text2  = 'INITIALIZE'
+          iv_text3  = 'ZCL_MEDAPI_GV_HTML_DOCUMENT'.
     ENDIF.
 
     IF iv_document_class IS INITIAL OR iv_document_object IS INITIAL.
-      gv_document_object = `ZMEDAPI_BROWSER`.
-      gv_document_class  = `TX`.
+      mv_document_object = `ZMEDAPI_BROWSER`.
+      mv_document_class  = `TX`.
     ELSE.
-      gv_document_object = iv_document_object.
-      gv_document_class  = iv_document_class.
+      mv_document_object = iv_document_object.
+      mv_document_class  = iv_document_class.
     ENDIF.
 
     g_initialization_mode = abap_true.
@@ -273,19 +282,19 @@ CLASS zcl_medapi_gv_html_document IMPLEMENTATION.
     ENDTRY.
 
     IF lo_parent_container IS NOT BOUND.
-      cl_ish_utl_exception=>raise_static( i_typ = 'E'
-                                          i_kla = 'N1BASE'
-                                          i_num = '030'
-                                          i_mv1 = '1'
-                                          i_mv2 = '_CREATE_CONTROL'
-                                          i_mv3 = 'ZCL_MEDAPI_GV_HTML_DOCUMENT' ).
+      RAISE EXCEPTION TYPE zcx_medapi
+        EXPORTING
+          is_textid = zcx_medapi=>msg_method_error
+          iv_text1  = '1'
+          iv_text2  = '_CREATE_CONTROL'
+          iv_text3  = 'ZCL_MEDAPI_GV_HTML_DOCUMENT'.
     ENDIF.
 
-    go_html_viewer = NEW #( ).
+    mo_html_viewer = NEW #( ).
 
-    go_html_viewer->start_application( lo_parent_container ).
+    mo_html_viewer->start_application( lo_parent_container ).
 
-    rr_control = go_html_viewer->epss_html_viewer.
+    rr_control = mo_html_viewer->epss_html_viewer.
 
   ENDMETHOD.
 
@@ -300,8 +309,6 @@ CLASS zcl_medapi_gv_html_document IMPLEMENTATION.
   METHOD _refresh_display.
 
     load_document( ).
-
-*    cl_gui_cfw=>update_view( ).
 
   ENDMETHOD.
 
