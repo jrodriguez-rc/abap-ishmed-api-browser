@@ -191,8 +191,8 @@ CLASS zcl_medapi_gv_html_document IMPLEMENTATION.
           iv_text4  = CONV #( sy-msgv4 ).
     ENDIF.
 
-    lo_html_viewer->load_data( IMPORTING  assigned_url         = lv_url
-                               CHANGING   data_table           = lt_html
+    lo_html_viewer->load_data( IMPORTING assigned_url         = lv_url
+                               CHANGING  data_table           = lt_html
                                EXCEPTIONS dp_invalid_parameter = 1
                                           dp_error_general     = 2
                                           cntl_error           = 3
