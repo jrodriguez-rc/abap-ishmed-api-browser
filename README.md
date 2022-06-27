@@ -1,3 +1,2 @@
-# abap-ishmed-api-browser
-Browser for Cerner i.s.hmed APIs
+# Browser for Cerner i.s.h.med APIs
 ![API Browser](./img/api_browser.png)
