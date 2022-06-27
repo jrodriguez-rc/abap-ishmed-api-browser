@@ -38,7 +38,7 @@
             "ignoreExceptions": true,
             "statics": "^G._.*$",
             "instance": "^M._.*$",
-            "constants": "^C._.*$",
+            "constants": "^GC.*$",
             "ignoreLocal": false,
             "ignoreInterfaces": false
         },
