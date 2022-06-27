@@ -236,6 +236,8 @@
                 "TABL",
                 "TTYP",
                 "SHLP",
+                "DOCT",
+                "TRAN",
                 "DEVC"
             ]
         },
