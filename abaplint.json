@@ -297,7 +297,7 @@
         "begin_single_include": true,
         "check_subrc": true,
         "cyclomatic_complexity":{
-            "max": 6
+            "max": 10
         },
         "forbidden_pseudo_and_pragma": {
             "ignoreGlobalClassDefinition": false,
