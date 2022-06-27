@@ -319,7 +319,9 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
 
     DATA(lo_documentation_main_view) = get_main_view( )->get_child_view_by_name( gc_viewname-documentation ).
 
-    DATA(lr_custom_view) = lo_documentation_main_view->get_child_view_by_name( cl_ish_gv_sdy_custcont=>co_def_viewname_custcont ).
+    DATA(lr_custom_view) =
+        lo_documentation_main_view->get_child_view_by_name(
+            cl_ish_gv_sdy_custcont=>co_def_viewname_custcont ).
 
     ro_result = CAST #( lr_custom_view->get_child_view_by_name( gc_viewname-documentation ) ).
 

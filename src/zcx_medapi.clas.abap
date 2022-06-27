@@ -1,7 +1,6 @@
 CLASS zcx_medapi DEFINITION
   PUBLIC
   INHERITING FROM cx_ish_static_handler
-  FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -9,11 +8,26 @@ CLASS zcx_medapi DEFINITION
     INTERFACES if_t100_dyn_msg.
     INTERFACES if_t100_message.
 
+    CONSTANTS:
+      "! Error &#38; while calling method &#38; of class &#38;
+      BEGIN OF msg_method_error,
+        msgid TYPE symsgid VALUE 'N1BASE',
+        msgno TYPE symsgno VALUE '030',
+        attr1 TYPE scx_attrname VALUE 'MV_TEXT1',
+        attr2 TYPE scx_attrname VALUE 'MV_TEXT2',
+        attr3 TYPE scx_attrname VALUE 'MV_TEXT3',
+        attr4 TYPE scx_attrname VALUE '',
+      END OF msg_method_error.
+
     DATA:
       mv_text1 TYPE string READ-ONLY,
       mv_text2 TYPE string READ-ONLY,
       mv_text3 TYPE string READ-ONLY,
       mv_text4 TYPE string READ-ONLY.
+
+    CLASS-METHODS get_system_textid
+      RETURNING
+        VALUE(rs_result) TYPE scx_t100key.
 
     METHODS constructor
       IMPORTING
@@ -51,6 +65,20 @@ CLASS zcx_medapi IMPLEMENTATION.
     mv_text2 = iv_text2.
     mv_text3 = iv_text3.
     mv_text4 = iv_text4.
+
+  ENDMETHOD.
+
+
+  METHOD get_system_textid.
+
+    rs_result =
+        VALUE #(
+            msgid = sy-msgid
+            msgno = sy-msgno
+            attr1 = `MV_TEXT1`
+            attr2 = `MV_TEXT2`
+            attr3 = `MV_TEXT3`
+            attr4 = `MV_TEXT4` ).
 
   ENDMETHOD.
 
