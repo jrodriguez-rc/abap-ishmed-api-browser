@@ -25,14 +25,27 @@ ENDMODULE.                 " pbo_0100  OUTPUT
 
 
 *&---------------------------------------------------------------------*
-*&      Module  before_pbo_sc_api_list_0100  OUTPUT
+*&      Module  before_pbo_sc_demo_report_0100  OUTPUT
 *&---------------------------------------------------------------------*
-MODULE before_pbo_sc_api_list_0100 OUTPUT.
+MODULE before_pbo_sc_demo_report_0100 OUTPUT.
 
   cl_ish_gui_dynpro_connector=>before_call_subscreen( EXPORTING i_repid           = gc_program_id
-                                                                i_subscreen_name  = 'SC_API_LIST'
-                                                      IMPORTING e_subscreen_repid = g_repid_sc_api_list_0100
-                                                                e_subscreen_dynnr = g_dynnr_sc_api_list_0100 ).
+                                                                i_subscreen_name  = 'SC_DEMO_REPORT'
+                                                      IMPORTING e_subscreen_repid = g_repid_sc_demo_report_0100
+                                                                e_subscreen_dynnr = g_dynnr_sc_demo_report_0100 ).
+
+ENDMODULE.                 " before_pbo_sc_api_list_0100  OUTPUT
+
+
+*&---------------------------------------------------------------------*
+*&      Module  before_pbo_sc_document_0100  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE before_pbo_sc_document_0100 OUTPUT.
+
+  cl_ish_gui_dynpro_connector=>before_call_subscreen( EXPORTING i_repid           = gc_program_id
+                                                                i_subscreen_name  = 'SC_DOCUMENT'
+                                                      IMPORTING e_subscreen_repid = g_repid_sc_document_0100
+                                                                e_subscreen_dynnr = g_dynnr_sc_document_0100 ).
 
 ENDMODULE.                 " before_pbo_sc_api_list_0100  OUTPUT
 

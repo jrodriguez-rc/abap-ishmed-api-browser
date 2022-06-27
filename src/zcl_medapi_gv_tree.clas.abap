@@ -21,6 +21,10 @@ CLASS zcl_medapi_gv_tree DEFINITION
       RAISING
         cx_ish_static_handler.
 
+    EVENTS selected_api
+      EXPORTING
+        VALUE(ei_api) TYPE REF TO if_ishmed_api.
+
   PROTECTED SECTION.
     METHODS initialize
       IMPORTING
@@ -31,7 +35,12 @@ CLASS zcl_medapi_gv_tree DEFINITION
       RAISING
         cx_ish_static_handler.
 
+    METHODS function_open_api
+      RAISING
+        cx_ish_static_handler.
+
     METHODS _load_layout REDEFINITION.
+    METHODS _own_cmd REDEFINITION.
 
   PRIVATE SECTION.
 
@@ -113,6 +122,48 @@ CLASS zcl_medapi_gv_tree IMPLEMENTATION.
     rr_layout = NEW cl_ish_gui_tree_layout( i_element_name         = get_element_name( )
                                             i_layout_name          = i_layout_name
                                             i_startup_expand_level = 2 ).
+
+  ENDMETHOD.
+
+
+  METHOD _own_cmd.
+
+    IF ir_tree_event IS NOT BOUND OR ir_tree_event->get_sender( ) <> me.
+      RETURN.
+    ENDIF.
+
+    CASE ir_tree_event->get_fcode( ).
+
+      WHEN cl_ish_gui_tree_event=>co_fcode_item_double_click OR
+           cl_ish_gui_tree_event=>co_fcode_node_double_click.
+        function_open_api( ).
+
+      WHEN OTHERS.
+        r_cmdresult = super->_own_cmd( ir_tree_event = ir_tree_event ir_orig_request = ir_orig_request ).
+        RETURN.
+
+    ENDCASE.
+
+    r_cmdresult = co_cmdresult_processed.
+
+  ENDMETHOD.
+
+
+  METHOD function_open_api.
+
+    TRY.
+        DATA(lo_selected_model) = CAST zcl_medapi_model( get_selected_model( ) ).
+      CATCH cx_sy_move_cast_error.
+        CLEAR lo_selected_model.
+    ENDTRY.
+
+    IF lo_selected_model IS NOT BOUND.
+      RETURN.
+    ENDIF.
+
+    RAISE EVENT selected_api
+      EXPORTING
+        ei_api = lo_selected_model->get_api( ).
 
   ENDMETHOD.
 

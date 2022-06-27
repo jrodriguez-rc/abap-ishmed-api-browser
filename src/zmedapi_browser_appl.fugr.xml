@@ -34,18 +34,29 @@
       </RPY_DYCATT>
       <RPY_DYCATT>
        <TYPE>SUBSCREEN</TYPE>
-       <NAME>SC_API_LIST</NAME>
+       <NAME>SC_DEMO_REPORT</NAME>
        <ELEMENT_OF>SCREEN</ELEMENT_OF>
        <LINE>001</LINE>
        <COLUMN>001</COLUMN>
        <LENGTH>255</LENGTH>
-       <HEIGHT>200</HEIGHT>
-       <C_RESIZE_V>X</C_RESIZE_V>
+       <HEIGHT>009</HEIGHT>
        <C_RESIZE_H>X</C_RESIZE_H>
-       <C_LINE_MIN>050</C_LINE_MIN>
-       <C_COLN_MIN>050</C_COLN_MIN>
+       <C_COLN_MIN>040</C_COLN_MIN>
        <C_SCROLL_V>X</C_SCROLL_V>
        <C_SCROLL_H>X</C_SCROLL_H>
+      </RPY_DYCATT>
+      <RPY_DYCATT>
+       <TYPE>SUBSCREEN</TYPE>
+       <NAME>SC_DOCUMENT</NAME>
+       <ELEMENT_OF>SCREEN</ELEMENT_OF>
+       <LINE>010</LINE>
+       <COLUMN>001</COLUMN>
+       <LENGTH>255</LENGTH>
+       <HEIGHT>191</HEIGHT>
+       <C_RESIZE_V>X</C_RESIZE_V>
+       <C_RESIZE_H>X</C_RESIZE_H>
+       <C_LINE_MIN>025</C_LINE_MIN>
+       <C_COLN_MIN>040</C_COLN_MIN>
       </RPY_DYCATT>
      </CONTAINERS>
      <FIELDS>
@@ -77,13 +88,23 @@
       </RPY_DYFLOW>
       <RPY_DYFLOW/>
       <RPY_DYFLOW>
-       <LINE>  MODULE before_pbo_sc_api_list_0100.</LINE>
+       <LINE>  MODULE before_pbo_sc_demo_report_0100.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>  CALL SUBSCREEN sc_api_list</LINE>
+       <LINE>  MODULE before_pbo_sc_document_0100.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW/>
+      <RPY_DYFLOW>
+       <LINE>  CALL SUBSCREEN sc_demo_report</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>    INCLUDING g_repid_sc_api_list_0100 g_dynnr_sc_api_list_0100.</LINE>
+       <LINE>    INCLUDING g_repid_sc_demo_report_0100 g_dynnr_sc_demo_report_0100.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>  CALL SUBSCREEN sc_document</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>    INCLUDING g_repid_sc_document_0100 g_dynnr_sc_document_0100.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW/>
       <RPY_DYFLOW>
@@ -107,7 +128,10 @@
       </RPY_DYFLOW>
       <RPY_DYFLOW/>
       <RPY_DYFLOW>
-       <LINE>  CALL SUBSCREEN sc_api_list.</LINE>
+       <LINE>  CALL SUBSCREEN sc_demo_report.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>  CALL SUBSCREEN sc_document.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW/>
       <RPY_DYFLOW>

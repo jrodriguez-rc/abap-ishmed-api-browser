@@ -13,6 +13,10 @@ CLASS zcl_medapi_model DEFINITION
       RAISING
         cx_ish_static_handler.
 
+    METHODS get_api
+      RETURNING
+        VALUE(ri_result) TYPE REF TO if_ishmed_api.
+
   PROTECTED SECTION.
 
   PRIVATE SECTION.
@@ -45,6 +49,13 @@ CLASS zcl_medapi_model IMPLEMENTATION.
     ENDTRY.
 
     ms_data = is_data.
+
+  ENDMETHOD.
+
+
+  METHOD get_api.
+
+    ri_result = ms_data-api.
 
   ENDMETHOD.
 

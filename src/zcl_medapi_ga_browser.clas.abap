@@ -5,21 +5,23 @@ CLASS zcl_medapi_ga_browser DEFINITION
 
   PUBLIC SECTION.
     CONSTANTS:
-      co_dynpro_number      TYPE dynnr VALUE `0100`,
-      co_program_id         TYPE repid VALUE `SAPLZMEDAPI_BROWSER_APPL`,
-      co_dockcont_extension TYPE n1gui_dockcont_extension VALUE 400.
+      gc_dynpro_number      TYPE dynnr VALUE `0100`,
+      gc_program_id         TYPE repid VALUE `SAPLZMEDAPI_BROWSER_APPL`,
+      gc_dockcont_extension TYPE n1gui_dockcont_extension VALUE 400.
 
     CONSTANTS:
-      BEGIN OF co_controller,
+      BEGIN OF gc_controller,
         tree          TYPE n1gui_element_name VALUE `CTR_TREE_API`,
-        documentation TYPE n1gui_element_name VALUE `CTR_DOCUMENTATION`,
-      END OF co_controller.
+        demo_report   TYPE n1gui_element_name VALUE `CTR_DEMO_REPORT`,
+        documentation TYPE n1gui_element_name VALUE `CTR_DOCUMENT`,
+      END OF gc_controller.
 
     CONSTANTS:
-      BEGIN OF co_viewname,
+      BEGIN OF gc_viewname,
         tree          TYPE n1gui_element_name VALUE `SC_VIEW_TREE_API`,
-        documentation TYPE n1gui_element_name VALUE `SC_DOCUMENTATION`,
-      END OF co_viewname.
+        demo_report   TYPE n1gui_element_name VALUE `SC_DEMO_REPORT`,
+        documentation TYPE n1gui_element_name VALUE `SC_DOCUMENT`,
+      END OF gc_viewname.
 
     CLASS-METHODS run_trx.
 
@@ -34,6 +36,10 @@ CLASS zcl_medapi_ga_browser DEFINITION
       RAISING
         cx_ish_static_handler.
 
+    METHODS get_documentation_view
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_medapi_gv_html_document.
+
     METHODS get_model
       RETURNING
         VALUE(ri_result) TYPE REF TO if_ish_gui_table_model.
@@ -46,7 +52,13 @@ CLASS zcl_medapi_ga_browser DEFINITION
       IMPORTING
         ir_main_controller TYPE REF TO if_ish_gui_main_controller
       RETURNING
-        VALUE(rr_result)   TYPE REF TO zcl_medapi_gv_tree
+        VALUE(ro_result)   TYPE REF TO zcl_medapi_gv_tree
+      RAISING
+        cx_ish_static_handler.
+
+    METHODS load_documentation_view
+      IMPORTING
+        ir_main_controller TYPE REF TO if_ish_gui_main_controller
       RAISING
         cx_ish_static_handler.
 
@@ -58,6 +70,12 @@ CLASS zcl_medapi_ga_browser DEFINITION
   PRIVATE SECTION.
     DATA:
       mo_model TYPE REF TO zcl_medapi_tree_model.
+
+    METHODS on_selected_api
+        FOR EVENT selected_api OF zcl_medapi_gv_tree
+      IMPORTING
+        ei_api
+        sender.
 
 ENDCLASS.
 
@@ -114,24 +132,26 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
             cl_ish_gui_mdy_titlebar=>create(
                 i_element_name = cl_ish_gui_mdy_titlebar=>co_def_titlebar_name
                 i_title        = 'TITLE_SIMPLE'
-                i_repid        = co_program_id ).
+                i_repid        = gc_program_id ).
 
         DATA(lo_pfstatus) =
             cl_ish_gui_mdy_pfstatus=>create(
                 i_element_name = cl_ish_gui_mdy_pfstatus=>co_def_pfstatus_name
                 i_pfkey        = 'STATUS_SIMPLE'
-                i_repid        = co_program_id ).
+                i_repid        = gc_program_id ).
 
         lo_main_controller->initialize( ir_application = me ir_view = lo_main_view ir_model = get_model( ) ).
 
         lo_main_view->initialize( ir_controller = lo_main_controller
-                                  i_repid       = co_program_id
-                                  i_dynnr       = co_dynpro_number
+                                  i_repid       = gc_program_id
+                                  i_dynnr       = gc_dynpro_number
                                   ir_titlebar   = lo_titlebar
                                   ir_pfstatus   = lo_pfstatus
                                   i_vcode       = g_vcode ).
 
         load_tree_view( lo_main_controller ).
+
+        load_documentation_view( lo_main_controller ).
 
       CLEANUP.
 
@@ -239,12 +259,12 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
     DATA(li_main_view) = ir_main_controller->get_mdy_view( ).
 
     DATA(lo_layout) = cl_ish_gui_dockcont_layout=>load_or_create( ir_application = me
-                                                                  i_element_name = co_viewname-tree
-                                                                  i_extension    = co_dockcont_extension ).
+                                                                  i_element_name = gc_viewname-tree
+                                                                  i_extension    = gc_dockcont_extension ).
 
-    DATA(lo_controller) = cl_ish_gc_simple=>create( i_element_name = co_controller-tree ).
+    DATA(lo_controller) = cl_ish_gc_simple=>create( i_element_name = gc_controller-tree ).
 
-    DATA(lo_tree_containter_view) = cl_ish_gui_dockcont_view=>create( i_element_name = co_viewname-tree ).
+    DATA(lo_tree_containter_view) = cl_ish_gui_dockcont_view=>create( i_element_name = gc_viewname-tree ).
 
     lo_controller->initialize( ir_parent_controller = ir_main_controller
                                ir_model             = NEW zcl_medapi_tree_model( )
@@ -256,9 +276,13 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
                                          ir_layout      = lo_layout
                                          i_vcode        = g_vcode ).
 
-    rr_result = zcl_medapi_gv_tree=>create_and_init_by_contview( ii_model           = get_model( )
-                                                                 iv_processing_mode = g_vcode
-                                                                 ii_parent_view     = lo_tree_containter_view ).
+    DATA(lo_view) = zcl_medapi_gv_tree=>create_and_init_by_contview( ii_model           = get_model( )
+                                                                     iv_processing_mode = g_vcode
+                                                                     ii_parent_view     = lo_tree_containter_view ).
+
+    SET HANDLER on_selected_api FOR lo_view ACTIVATION abap_true.
+
+    ro_result = lo_view.
 
   ENDMETHOD.
 
@@ -271,9 +295,52 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
     ENDIF.
 
     TRY.
-        rr_result = CAST #( lr_main_controller->get_child_controller_by_name( co_controller-tree ) ).
+        rr_result = CAST #( lr_main_controller->get_child_controller_by_name( gc_controller-tree ) ).
       CATCH cx_sy_move_cast_error.
-        RETURN.
+        CLEAR rr_result.
+    ENDTRY.
+
+  ENDMETHOD.
+
+
+  METHOD load_documentation_view.
+
+    zcl_medapi_gv_html_document=>create_and_init_by_dynpview(
+        iv_element_name    = gc_viewname-documentation
+        iv_ctrname         = gc_controller-documentation
+        ii_parent_view     = ir_main_controller->get_mdy_view( )
+        iv_sdy_ctrname     = gc_controller-documentation
+        iv_sdy_viewname    = gc_viewname-documentation ).
+
+  ENDMETHOD.
+
+
+  METHOD get_documentation_view.
+
+    DATA(lo_documentation_main_view) = get_main_view( )->get_child_view_by_name( gc_viewname-documentation ).
+
+    DATA(lr_custom_view) = lo_documentation_main_view->get_child_view_by_name( cl_ish_gv_sdy_custcont=>co_def_viewname_custcont ).
+
+    ro_result = CAST #( lr_custom_view->get_child_view_by_name( gc_viewname-documentation ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_selected_api.
+
+    IF ei_api IS NOT BOUND.
+      RETURN.
+    ENDIF.
+
+    DATA(lo_view) = get_documentation_view( ).
+
+    ei_api->if_ishmed_api_documentation~get( IMPORTING e_id     = DATA(lv_object_class)
+                                                       e_object = DATA(lv_object_object) ).
+
+    TRY.
+        lo_view->set_document( iv_document_object = lv_object_object iv_document_class = lv_object_class ).
+      CATCH cx_ish_static_handler INTO DATA(lx_handler).
+        _collect_exception( lx_handler ).
     ENDTRY.
 
   ENDMETHOD.
