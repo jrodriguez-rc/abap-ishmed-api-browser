@@ -40,6 +40,10 @@ CLASS zcl_medapi_ga_browser DEFINITION
       RETURNING
         VALUE(ro_result) TYPE REF TO zcl_medapi_gv_html_document.
 
+    METHODS get_sample_report_view
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_medapi_gv_sample_report.
+
     METHODS get_model
       RETURNING
         VALUE(ri_result) TYPE REF TO if_ish_gui_table_model.
@@ -59,6 +63,12 @@ CLASS zcl_medapi_ga_browser DEFINITION
     METHODS load_documentation_view
       IMPORTING
         ir_main_controller TYPE REF TO if_ish_gui_main_controller
+      RAISING
+        cx_ish_static_handler.
+
+    METHODS load_sample_report_view
+      IMPORTING
+        ii_api TYPE REF TO if_ishmed_api
       RAISING
         cx_ish_static_handler.
 
@@ -315,15 +325,63 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD load_sample_report_view.
+
+    DATA(lo_sample_report_main_ctr) = get_main_controller( )->get_child_controller_by_name( gc_controller-demo_report ).
+    IF lo_sample_report_main_ctr IS BOUND.
+      lo_sample_report_main_ctr->destroy( ).
+    ENDIF.
+
+    IF ii_api IS NOT BOUND.
+      RETURN.
+    ENDIF.
+
+    zcl_medapi_gv_sample_report=>create_and_init_by_dynpview(
+        ii_api          = ii_api
+        iv_element_name = gc_viewname-demo_report
+        iv_ctrname      = gc_controller-demo_report
+        ii_parent_view  = get_main_controller( )->get_mdy_view( )
+        iv_sdy_ctrname  = gc_controller-demo_report
+        iv_sdy_viewname = gc_viewname-demo_report ).
+
+
+  ENDMETHOD.
+
+
   METHOD get_documentation_view.
 
     DATA(lo_documentation_main_view) = get_main_view( )->get_child_view_by_name( gc_viewname-documentation ).
+    IF lo_documentation_main_view IS NOT BOUND.
+      RETURN.
+    ENDIF.
 
-    DATA(lr_custom_view) =
+    DATA(li_custom_view) =
         lo_documentation_main_view->get_child_view_by_name(
             cl_ish_gv_sdy_custcont=>co_def_viewname_custcont ).
+    IF li_custom_view IS NOT BOUND.
+      RETURN.
+    ENDIF.
 
-    ro_result = CAST #( lr_custom_view->get_child_view_by_name( gc_viewname-documentation ) ).
+    ro_result = CAST #( li_custom_view->get_child_view_by_name( gc_viewname-documentation ) ).
+
+  ENDMETHOD.
+
+
+  METHOD get_sample_report_view.
+
+    DATA(lo_sample_report_main_view) = get_main_view( )->get_child_view_by_name( gc_viewname-demo_report ).
+    IF lo_sample_report_main_view IS NOT BOUND.
+      RETURN.
+    ENDIF.
+
+    DATA(li_custom_view) =
+        lo_sample_report_main_view->get_child_view_by_name(
+            cl_ish_gv_sdy_custcont=>co_def_viewname_custcont ).
+    IF li_custom_view IS NOT BOUND.
+      RETURN.
+    ENDIF.
+
+    ro_result = CAST #( li_custom_view->get_child_view_by_name( gc_viewname-demo_report ) ).
 
   ENDMETHOD.
 
@@ -341,6 +399,7 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
 
     TRY.
         lo_view->set_document( iv_document_object = lv_object_object iv_document_class = lv_object_class ).
+        load_sample_report_view( ei_api ).
       CATCH cx_ish_static_handler INTO DATA(lx_handler).
         _collect_exception( lx_handler ).
     ENDTRY.
