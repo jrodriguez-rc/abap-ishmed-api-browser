@@ -189,7 +189,8 @@
             "regex": true,
             "selectWithoutInto": true,
             "sortByFS": true,
-            "typePools": true
+            "typePools": true,
+            "clientSpecified": true
         },
         "parser_error": true,
         "preferred_compare_operator": {
@@ -227,20 +228,6 @@
         "when_others_last": true,
         "whitespace_end": true,
         "ambiguous_statement": true,
-        "allowed_object_types": {
-            "allowed": [
-                "PROG",
-                "CLAS",
-                "INTF",
-                "FUGR",
-                "TABL",
-                "TTYP",
-                "SHLP",
-                "DOCT",
-                "TRAN",
-                "DEVC"
-            ]
-        },
         "begin_end_names": true,
         "check_transformation_exists": true,
         "form_tables_obsolete": true,
