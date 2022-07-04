@@ -15,7 +15,7 @@ CLASS zcl_medapi_gv_sample_report DEFINITION
         iv_element_name    TYPE n1gui_element_name DEFAULT gc_def_viewname
         ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable OPTIONAL
         io_layout          TYPE REF TO cl_ish_gui_grid_layout OPTIONAL
-        iv_processing_mode TYPE ish_vcode DEFAULT co_vcode_display
+        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
         iv_ctrname         TYPE n1gui_element_name DEFAULT gc_def_ctrname
         ii_parent_view     TYPE REF TO if_ish_gui_container_view
       RETURNING
@@ -29,7 +29,7 @@ CLASS zcl_medapi_gv_sample_report DEFINITION
         iv_element_name    TYPE n1gui_element_name DEFAULT gc_def_viewname
         ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable OPTIONAL
         io_layout          TYPE REF TO cl_ish_gui_grid_layout OPTIONAL
-        iv_processing_mode TYPE ish_vcode DEFAULT co_vcode_display
+        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
         iv_ctrname         TYPE n1gui_element_name DEFAULT gc_def_ctrname
         ii_parent_view     TYPE REF TO if_ish_gui_dynpro_view
         iv_sdy_ctrname     TYPE n1gui_element_name DEFAULT gc_def_sdy_ctrname
@@ -46,7 +46,7 @@ CLASS zcl_medapi_gv_sample_report DEFINITION
         ii_controller      TYPE REF TO if_ish_gui_controller
         ii_parent_view     TYPE REF TO if_ish_gui_container_view
         io_layout          TYPE REF TO cl_ish_gui_grid_layout
-        iv_processing_mode TYPE ish_vcode DEFAULT co_vcode_display
+        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
       RAISING
         cx_ish_static_handler.
 
@@ -104,7 +104,7 @@ CLASS zcl_medapi_gv_sample_report DEFINITION
   PRIVATE SECTION.
     DATA:
       mi_model TYPE REF TO if_ish_gui_table_model,
-      gi_api   TYPE REF TO if_ishmed_api.
+      mi_api   TYPE REF TO if_ishmed_api.
 
 ENDCLASS.
 
@@ -167,7 +167,7 @@ CLASS zcl_medapi_gv_sample_report IMPLEMENTATION.
 
     g_initialization_mode = abap_true.
 
-    gi_api = ii_api.
+    mi_api = ii_api.
 
     TRY.
         mi_model = generate_model( ).
@@ -188,7 +188,7 @@ CLASS zcl_medapi_gv_sample_report IMPLEMENTATION.
 
   METHOD get_api.
 
-    ri_model = gi_api.
+    ri_model = mi_api.
 
   ENDMETHOD.
 
@@ -409,8 +409,6 @@ CLASS zcl_medapi_gv_sample_report IMPLEMENTATION.
     IF lv_report_name IS INITIAL.
       RETURN.
     ENDIF.
-
-*    SUBMIT lv_report AND RETURN.
 
     CALL FUNCTION 'RS_TOOL_ACCESS'
       EXPORTING
