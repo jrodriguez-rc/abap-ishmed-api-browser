@@ -196,7 +196,7 @@ CLASS zcl_medapi_gv_sample_report IMPLEMENTATION.
   METHOD generate_model.
 
     DATA:
-      lt_text    TYPE textpool_t,
+      lt_text    TYPE textpool_table,
       lt_reports TYPE zmedapi_t_sample_report.
 
     get_api( )->if_ishmed_api_documentation~get_program( IMPORTING et_value = DATA(lt_programs) ).
