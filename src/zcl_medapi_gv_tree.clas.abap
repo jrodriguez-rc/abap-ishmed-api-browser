@@ -4,43 +4,39 @@ CLASS zcl_medapi_gv_tree DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    CONSTANTS gc_def_tree_ctrname TYPE n1gui_element_name VALUE 'CTR_TREE'.
+
+    CONSTANTS gc_def_tree_ctrname  TYPE n1gui_element_name VALUE 'CTR_TREE'.
     CONSTANTS gc_def_tree_viewname TYPE n1gui_element_name VALUE 'VIEW_TREE'.
 
     CLASS-METHODS create_and_init_by_contview
-      IMPORTING
-        iv_element_name    TYPE n1gui_element_name DEFAULT gc_def_tree_viewname
-        ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable OPTIONAL
-        ii_model           TYPE REF TO if_ish_gui_model
-        io_layout          TYPE REF TO cl_ish_gui_tree_layout OPTIONAL
-        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
-        iv_ctrname         TYPE n1gui_element_name DEFAULT gc_def_tree_ctrname
-        ii_parent_view     TYPE REF TO if_ish_gui_container_view
-      RETURNING
-        VALUE(ro_result)   TYPE REF TO zcl_medapi_gv_tree
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING iv_element_name    TYPE n1gui_element_name            DEFAULT gc_def_tree_viewname
+                ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable  OPTIONAL
+                ii_model           TYPE REF TO if_ish_gui_model
+                io_layout          TYPE REF TO cl_ish_gui_tree_layout OPTIONAL
+                iv_processing_mode TYPE ish_vcode                     DEFAULT if_ish_gui_view=>co_vcode_display
+                iv_ctrname         TYPE n1gui_element_name            DEFAULT gc_def_tree_ctrname
+                ii_parent_view     TYPE REF TO if_ish_gui_container_view
+      RETURNING VALUE(ro_result)   TYPE REF TO zcl_medapi_gv_tree
+      RAISING   cx_ish_static_handler.
 
     EVENTS selected_api
       EXPORTING
         VALUE(ei_api) TYPE REF TO if_ishmed_api.
 
   PROTECTED SECTION.
+
     METHODS initialize
-      IMPORTING
-        ii_controller      TYPE REF TO if_ish_gui_controller
-        ii_parent_view     TYPE REF TO if_ish_gui_container_view
-        ii_layout          TYPE REF TO cl_ish_gui_tree_layout OPTIONAL
-        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING ii_controller      TYPE REF TO if_ish_gui_controller
+                ii_parent_view     TYPE REF TO if_ish_gui_container_view
+                ii_layout          TYPE REF TO cl_ish_gui_tree_layout OPTIONAL
+                iv_processing_mode TYPE ish_vcode                     DEFAULT if_ish_gui_view=>co_vcode_display
+      RAISING   cx_ish_static_handler.
 
     METHODS function_open_api
-      RAISING
-        cx_ish_static_handler.
+      RAISING cx_ish_static_handler.
 
     METHODS _load_layout REDEFINITION.
-    METHODS _own_cmd REDEFINITION.
+    METHODS _own_cmd     REDEFINITION.
 
   PRIVATE SECTION.
 
@@ -62,12 +58,14 @@ CLASS zcl_medapi_gv_tree IMPLEMENTATION.
                                           i_mv3 = 'ZCL_MEDAPI_GV_TREE' ).
     ENDIF.
 
-    DATA(lr_ctr) = cl_ish_gc_simple=>create( i_element_name = iv_ctrname ir_cb_destroyable = ii_cb_destroyable ).
+    DATA(lr_ctr) = cl_ish_gc_simple=>create( i_element_name    = iv_ctrname
+                                             ir_cb_destroyable = ii_cb_destroyable ).
 
-    ro_result = NEW #( i_element_name = iv_element_name ir_cb_destroyable = ii_cb_destroyable ).
+    ro_result = NEW #( i_element_name    = iv_element_name
+                       ir_cb_destroyable = ii_cb_destroyable ).
 
     lr_ctr->initialize( ir_parent_controller = COND #( WHEN ii_parent_view IS BOUND
-                                                           THEN ii_parent_view->get_controller( ) )
+                                                       THEN ii_parent_view->get_controller( ) )
                         ir_model             = ii_model
                         ir_view              = ro_result
                         i_vcode              = iv_processing_mode ).
@@ -139,7 +137,8 @@ CLASS zcl_medapi_gv_tree IMPLEMENTATION.
         function_open_api( ).
 
       WHEN OTHERS.
-        r_cmdresult = super->_own_cmd( ir_tree_event = ir_tree_event ir_orig_request = ir_orig_request ).
+        r_cmdresult = super->_own_cmd( ir_tree_event   = ir_tree_event
+                                       ir_orig_request = ir_orig_request ).
         RETURN.
 
     ENDCASE.
@@ -162,8 +161,8 @@ CLASS zcl_medapi_gv_tree IMPLEMENTATION.
     ENDIF.
 
     RAISE EVENT selected_api
-      EXPORTING
-        ei_api = lo_selected_model->get_api( ).
+          EXPORTING
+            ei_api = lo_selected_model->get_api( ).
 
   ENDMETHOD.
 

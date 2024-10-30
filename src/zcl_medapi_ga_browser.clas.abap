@@ -4,10 +4,10 @@ CLASS zcl_medapi_ga_browser DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    CONSTANTS:
-      gc_dynpro_number      TYPE dynnr VALUE `0100`,
-      gc_program_id         TYPE repid VALUE `SAPLZMEDAPI_BROWSER_APPL`,
-      gc_dockcont_extension TYPE n1gui_dockcont_extension VALUE 400.
+
+    CONSTANTS gc_dynpro_number      TYPE dynnr                    VALUE `0100`.
+    CONSTANTS gc_program_id         TYPE repid                    VALUE `SAPLZMEDAPI_BROWSER_APPL`.
+    CONSTANTS gc_dockcont_extension TYPE n1gui_dockcont_extension VALUE 400.
 
     CONSTANTS:
       BEGIN OF gc_controller,
@@ -26,66 +26,52 @@ CLASS zcl_medapi_ga_browser DEFINITION
     CLASS-METHODS run_trx.
 
     CLASS-METHODS execute
-      IMPORTING
-        io_layout TYPE REF TO cl_ish_gui_appl_layout OPTIONAL
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING io_layout TYPE REF TO cl_ish_gui_appl_layout OPTIONAL
+      RAISING   cx_ish_static_handler.
 
   PROTECTED SECTION.
+
     METHODS create_model
-      RAISING
-        cx_ish_static_handler.
+      RAISING cx_ish_static_handler.
 
     METHODS get_documentation_view
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_medapi_gv_html_document.
+      RETURNING VALUE(ro_result) TYPE REF TO zcl_medapi_gv_html_document.
 
     METHODS get_sample_report_view
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_medapi_gv_sample_report.
+      RETURNING VALUE(ro_result) TYPE REF TO zcl_medapi_gv_sample_report.
 
     METHODS get_model
-      RETURNING
-        VALUE(ri_result) TYPE REF TO if_ish_gui_table_model.
+      RETURNING VALUE(ri_result) TYPE REF TO if_ish_gui_table_model.
 
     METHODS get_tree_controller
-      RETURNING
-        VALUE(rr_result) TYPE REF TO if_ish_gui_controller.
+      RETURNING VALUE(rr_result) TYPE REF TO if_ish_gui_controller.
 
     METHODS load_tree_view
-      IMPORTING
-        ir_main_controller TYPE REF TO if_ish_gui_main_controller
-      RETURNING
-        VALUE(ro_result)   TYPE REF TO zcl_medapi_gv_tree
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING ir_main_controller TYPE REF TO if_ish_gui_main_controller
+      RETURNING VALUE(ro_result)   TYPE REF TO zcl_medapi_gv_tree
+      RAISING   cx_ish_static_handler.
 
     METHODS load_documentation_view
-      IMPORTING
-        ir_main_controller TYPE REF TO if_ish_gui_main_controller
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING ir_main_controller TYPE REF TO if_ish_gui_main_controller
+      RAISING   cx_ish_static_handler.
 
     METHODS load_sample_report_view
-      IMPORTING
-        ii_api TYPE REF TO if_ishmed_api
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING ii_api TYPE REF TO if_ishmed_api
+      RAISING   cx_ish_static_handler.
 
-    METHODS _create_main_controller REDEFINITION.
+    METHODS _create_main_controller     REDEFINITION.
     METHODS _get_okcodereq_by_controlev REDEFINITION.
-    METHODS _init_appl REDEFINITION.
-    METHODS _run REDEFINITION.
+    METHODS _init_appl                  REDEFINITION.
+    METHODS _run                        REDEFINITION.
 
   PRIVATE SECTION.
-    DATA:
-      mo_model TYPE REF TO zcl_medapi_tree_model.
+
+    DATA mo_model TYPE REF TO zcl_medapi_tree_model.
 
     METHODS on_selected_api
-        FOR EVENT selected_api OF zcl_medapi_gv_tree
-      IMPORTING
-        ei_api
-        sender.
+      FOR EVENT selected_api OF zcl_medapi_gv_tree
+      IMPORTING ei_api
+                sender.
 
 ENDCLASS.
 
@@ -96,8 +82,7 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
 
   METHOD run_trx.
 
-    DATA:
-      lr_errorhandler TYPE REF TO cl_ishmed_errorhandling.
+    DATA lr_errorhandler TYPE REF TO cl_ishmed_errorhandling.
 
     TRY.
         execute( ).
@@ -131,26 +116,24 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
     TRY.
 
         DATA(lo_main_controller) =
-            cl_ish_gc_main_simple=>create(
-                i_element_name = if_ish_gui_main_controller=>co_def_main_controller_name ).
+            cl_ish_gc_main_simple=>create( i_element_name = if_ish_gui_main_controller=>co_def_main_controller_name ).
 
         DATA(lo_main_view) =
-            cl_ish_gv_mdy_simple=>create(
-                i_element_name = if_ish_gui_mdy_view=>co_def_main_view_name ).
+            cl_ish_gv_mdy_simple=>create( i_element_name = if_ish_gui_mdy_view=>co_def_main_view_name ).
 
         DATA(lo_titlebar) =
-            cl_ish_gui_mdy_titlebar=>create(
-                i_element_name = cl_ish_gui_mdy_titlebar=>co_def_titlebar_name
-                i_title        = 'TITLE_SIMPLE'
-                i_repid        = gc_program_id ).
+            cl_ish_gui_mdy_titlebar=>create( i_element_name = cl_ish_gui_mdy_titlebar=>co_def_titlebar_name
+                                             i_title        = 'TITLE_SIMPLE'
+                                             i_repid        = gc_program_id ).
 
         DATA(lo_pfstatus) =
-            cl_ish_gui_mdy_pfstatus=>create(
-                i_element_name = cl_ish_gui_mdy_pfstatus=>co_def_pfstatus_name
-                i_pfkey        = 'STATUS_SIMPLE'
-                i_repid        = gc_program_id ).
+            cl_ish_gui_mdy_pfstatus=>create( i_element_name = cl_ish_gui_mdy_pfstatus=>co_def_pfstatus_name
+                                             i_pfkey        = 'STATUS_SIMPLE'
+                                             i_repid        = gc_program_id ).
 
-        lo_main_controller->initialize( ir_application = me ir_view = lo_main_view ir_model = get_model( ) ).
+        lo_main_controller->initialize( ir_application = me
+                                        ir_view        = lo_main_view
+                                        ir_model       = get_model( ) ).
 
         lo_main_view->initialize( ir_controller = lo_main_controller
                                   i_repid       = gc_program_id
@@ -188,8 +171,8 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
     ENDIF.
 
     DATA(lv_create_okcode_request) =
-        xsdbool( ir_control_event->get_fcode( ) = cl_ish_gui_tree_event=>co_fcode_item_double_click
-              OR ir_control_event->get_fcode( ) = cl_ish_gui_tree_event=>co_fcode_node_double_click ).
+        xsdbool(    ir_control_event->get_fcode( ) = cl_ish_gui_tree_event=>co_fcode_item_double_click
+                 OR ir_control_event->get_fcode( ) = cl_ish_gui_tree_event=>co_fcode_node_double_click ).
 
     IF lv_create_okcode_request = abap_true.
       rr_okcode_request = cl_ish_gui_okcode_request=>create_by_control_event( ir_sender        = me
@@ -218,10 +201,12 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
         create_model( ).
 
         DATA(lo_layout) =
-          COND #( WHEN ir_layout IS BOUND THEN ir_layout
-                                          ELSE NEW cl_ish_gui_appl_layout( i_use_msg_viewer = abap_true ) ).
+          COND #( WHEN ir_layout IS BOUND
+                  THEN ir_layout
+                  ELSE NEW cl_ish_gui_appl_layout( i_use_msg_viewer = abap_true ) ).
 
-        super->_init_appl( i_vcode = i_vcode ir_layout = lo_layout ).
+        super->_init_appl( i_vcode   = i_vcode
+                           ir_layout = lo_layout ).
 
       CLEANUP.
 
@@ -315,12 +300,11 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
 
   METHOD load_documentation_view.
 
-    zcl_medapi_gv_html_document=>create_and_init_by_dynpview(
-        iv_element_name    = gc_viewname-documentation
-        iv_ctrname         = gc_controller-documentation
-        ii_parent_view     = ir_main_controller->get_mdy_view( )
-        iv_sdy_ctrname     = gc_controller-documentation
-        iv_sdy_viewname    = gc_viewname-documentation ).
+    zcl_medapi_gv_html_document=>create_and_init_by_dynpview( iv_element_name = gc_viewname-documentation
+                                                              iv_ctrname      = gc_controller-documentation
+                                                              ii_parent_view  = ir_main_controller->get_mdy_view( )
+                                                              iv_sdy_ctrname  = gc_controller-documentation
+                                                              iv_sdy_viewname = gc_viewname-documentation ).
 
   ENDMETHOD.
 
@@ -336,14 +320,12 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    zcl_medapi_gv_sample_report=>create_and_init_by_dynpview(
-        ii_api          = ii_api
-        iv_element_name = gc_viewname-demo_report
-        iv_ctrname      = gc_controller-demo_report
-        ii_parent_view  = get_main_controller( )->get_mdy_view( )
-        iv_sdy_ctrname  = gc_controller-demo_report
-        iv_sdy_viewname = gc_viewname-demo_report ).
-
+    zcl_medapi_gv_sample_report=>create_and_init_by_dynpview( ii_api          = ii_api
+                                                              iv_element_name = gc_viewname-demo_report
+                                                              iv_ctrname      = gc_controller-demo_report
+                                                              ii_parent_view  = get_main_controller( )->get_mdy_view( )
+                                                              iv_sdy_ctrname  = gc_controller-demo_report
+                                                              iv_sdy_viewname = gc_viewname-demo_report ).
 
   ENDMETHOD.
 
@@ -356,8 +338,7 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
     ENDIF.
 
     DATA(li_custom_view) =
-        lo_documentation_main_view->get_child_view_by_name(
-            cl_ish_gv_sdy_custcont=>co_def_viewname_custcont ).
+        lo_documentation_main_view->get_child_view_by_name( cl_ish_gv_sdy_custcont=>co_def_viewname_custcont ).
     IF li_custom_view IS NOT BOUND.
       RETURN.
     ENDIF.
@@ -375,8 +356,7 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
     ENDIF.
 
     DATA(li_custom_view) =
-        lo_sample_report_main_view->get_child_view_by_name(
-            cl_ish_gv_sdy_custcont=>co_def_viewname_custcont ).
+        lo_sample_report_main_view->get_child_view_by_name( cl_ish_gv_sdy_custcont=>co_def_viewname_custcont ).
     IF li_custom_view IS NOT BOUND.
       RETURN.
     ENDIF.
@@ -398,7 +378,8 @@ CLASS zcl_medapi_ga_browser IMPLEMENTATION.
                                                        e_object = DATA(lv_object_object) ).
 
     TRY.
-        lo_view->set_document( iv_document_object = lv_object_object iv_document_class = lv_object_class ).
+        lo_view->set_document( iv_document_object = lv_object_object
+                               iv_document_class  = lv_object_class ).
         load_sample_report_view( ei_api ).
       CATCH cx_ish_static_handler INTO DATA(lx_handler).
         _collect_exception( lx_handler ).

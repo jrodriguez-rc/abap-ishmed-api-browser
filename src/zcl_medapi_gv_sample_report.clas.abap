@@ -4,107 +4,87 @@ CLASS zcl_medapi_gv_sample_report DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    CONSTANTS gc_def_ctrname TYPE n1gui_element_name VALUE `CTR_SAMPLE_REPORT`.
-    CONSTANTS gc_def_sdy_ctrname TYPE n1gui_element_name VALUE `SDY_SAMPLE_REPORT_CTR`.
+
+    CONSTANTS gc_def_ctrname      TYPE n1gui_element_name VALUE `CTR_SAMPLE_REPORT`.
+    CONSTANTS gc_def_sdy_ctrname  TYPE n1gui_element_name VALUE `SDY_SAMPLE_REPORT_CTR`.
     CONSTANTS gc_def_sdy_viewname TYPE n1gui_element_name VALUE `SDY_SAMPLE_REPORT_VIEWNAME`.
-    CONSTANTS gc_def_viewname TYPE n1gui_element_name VALUE `SAMPLE_REPORT_VIEWNAME`.
+    CONSTANTS gc_def_viewname     TYPE n1gui_element_name VALUE `SAMPLE_REPORT_VIEWNAME`.
 
     CLASS-METHODS create_and_init_by_contview
-      IMPORTING
-        ii_api             TYPE REF TO if_ishmed_api
-        iv_element_name    TYPE n1gui_element_name DEFAULT gc_def_viewname
-        ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable OPTIONAL
-        io_layout          TYPE REF TO cl_ish_gui_grid_layout OPTIONAL
-        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
-        iv_ctrname         TYPE n1gui_element_name DEFAULT gc_def_ctrname
-        ii_parent_view     TYPE REF TO if_ish_gui_container_view
-      RETURNING
-        VALUE(ro_instance) TYPE REF TO zcl_medapi_gv_sample_report
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING ii_api             TYPE REF TO if_ishmed_api
+                iv_element_name    TYPE n1gui_element_name            DEFAULT gc_def_viewname
+                ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable  OPTIONAL
+                io_layout          TYPE REF TO cl_ish_gui_grid_layout OPTIONAL
+                iv_processing_mode TYPE ish_vcode                     DEFAULT if_ish_gui_view=>co_vcode_display
+                iv_ctrname         TYPE n1gui_element_name            DEFAULT gc_def_ctrname
+                ii_parent_view     TYPE REF TO if_ish_gui_container_view
+      RETURNING VALUE(ro_instance) TYPE REF TO zcl_medapi_gv_sample_report
+      RAISING   cx_ish_static_handler.
 
     CLASS-METHODS create_and_init_by_dynpview
-      IMPORTING
-        ii_api             TYPE REF TO if_ishmed_api
-        iv_element_name    TYPE n1gui_element_name DEFAULT gc_def_viewname
-        ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable OPTIONAL
-        io_layout          TYPE REF TO cl_ish_gui_grid_layout OPTIONAL
-        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
-        iv_ctrname         TYPE n1gui_element_name DEFAULT gc_def_ctrname
-        ii_parent_view     TYPE REF TO if_ish_gui_dynpro_view
-        iv_sdy_ctrname     TYPE n1gui_element_name DEFAULT gc_def_sdy_ctrname
-        iv_sdy_viewname    TYPE n1gui_element_name DEFAULT gc_def_sdy_viewname
-      RETURNING
-        VALUE(ro_instance) TYPE REF TO zcl_medapi_gv_sample_report
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING ii_api             TYPE REF TO if_ishmed_api
+                iv_element_name    TYPE n1gui_element_name            DEFAULT gc_def_viewname
+                ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable  OPTIONAL
+                io_layout          TYPE REF TO cl_ish_gui_grid_layout OPTIONAL
+                iv_processing_mode TYPE ish_vcode                     DEFAULT if_ish_gui_view=>co_vcode_display
+                iv_ctrname         TYPE n1gui_element_name            DEFAULT gc_def_ctrname
+                ii_parent_view     TYPE REF TO if_ish_gui_dynpro_view
+                iv_sdy_ctrname     TYPE n1gui_element_name            DEFAULT gc_def_sdy_ctrname
+                iv_sdy_viewname    TYPE n1gui_element_name            DEFAULT gc_def_sdy_viewname
+      RETURNING VALUE(ro_instance) TYPE REF TO zcl_medapi_gv_sample_report
+      RAISING   cx_ish_static_handler.
 
   PROTECTED SECTION.
+
     METHODS initialize
-      IMPORTING
-        ii_api             TYPE REF TO if_ishmed_api
-        ii_controller      TYPE REF TO if_ish_gui_controller
-        ii_parent_view     TYPE REF TO if_ish_gui_container_view
-        io_layout          TYPE REF TO cl_ish_gui_grid_layout
-        iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING ii_api             TYPE REF TO if_ishmed_api
+                ii_controller      TYPE REF TO if_ish_gui_controller
+                ii_parent_view     TYPE REF TO if_ish_gui_container_view
+                io_layout          TYPE REF TO cl_ish_gui_grid_layout
+                iv_processing_mode TYPE ish_vcode DEFAULT if_ish_gui_view=>co_vcode_display
+      RAISING   cx_ish_static_handler.
 
     METHODS get_api
-      RETURNING
-        VALUE(ri_model) TYPE REF TO if_ishmed_api.
+      RETURNING VALUE(ri_model) TYPE REF TO if_ishmed_api.
 
     METHODS generate_model
-      RETURNING
-        VALUE(ri_model) TYPE REF TO if_ish_gui_table_model
-      RAISING
-        cx_ish_static_handler.
+      RETURNING VALUE(ri_model) TYPE REF TO if_ish_gui_table_model
+      RAISING   cx_ish_static_handler.
 
     METHODS get_icon_document
-      RETURNING
-        VALUE(rv_result) TYPE n1icon_document
-      RAISING
-        zcx_medapi.
+      RETURNING VALUE(rv_result) TYPE n1icon_document
+      RAISING   zcx_medapi.
 
     METHODS get_icon_source_code
-      RETURNING
-        VALUE(rv_result) TYPE zmedapi_source_code_icon
-      RAISING
-        zcx_medapi.
+      RETURNING VALUE(rv_result) TYPE zmedapi_source_code_icon
+      RAISING   zcx_medapi.
 
     METHODS get_icon_execute
-      RETURNING
-        VALUE(rv_result) TYPE zmedapi_execute_icon
-      RAISING
-        zcx_medapi.
+      RETURNING VALUE(rv_result) TYPE zmedapi_execute_icon
+      RAISING   zcx_medapi.
 
     METHODS get_report_selected
-      RETURNING
-        VALUE(rv_result) TYPE progname
-      RAISING
-        cx_ish_static_handler.
+      RETURNING VALUE(rv_result) TYPE progname
+      RAISING   cx_ish_static_handler.
 
     METHODS function_open_documentation
-      RAISING
-        cx_ish_static_handler.
+      RAISING cx_ish_static_handler.
 
     METHODS function_execute
-      RAISING
-        cx_ish_static_handler.
+      RAISING cx_ish_static_handler.
 
     METHODS function_open_source_code
-      RAISING
-        cx_ish_static_handler.
+      RAISING cx_ish_static_handler.
 
-    METHODS _build_fcat REDEFINITION.
-    METHODS _build_layout REDEFINITION.
+    METHODS _build_fcat     REDEFINITION.
+    METHODS _build_layout   REDEFINITION.
     METHODS _get_main_model REDEFINITION.
-    METHODS _own_cmd REDEFINITION.
+    METHODS _own_cmd        REDEFINITION.
 
   PRIVATE SECTION.
-    DATA:
-      mi_model TYPE REF TO if_ish_gui_table_model,
-      mi_api   TYPE REF TO if_ishmed_api.
+
+    DATA mi_model TYPE REF TO if_ish_gui_table_model.
+    DATA mi_api   TYPE REF TO if_ishmed_api.
 
 ENDCLASS.
 
@@ -115,12 +95,14 @@ CLASS zcl_medapi_gv_sample_report IMPLEMENTATION.
 
   METHOD create_and_init_by_contview.
 
-    DATA(lo_controller) = cl_ish_gc_simple=>create( i_element_name = iv_ctrname ir_cb_destroyable = ii_cb_destroyable ).
+    DATA(lo_controller) = cl_ish_gc_simple=>create( i_element_name    = iv_ctrname
+                                                    ir_cb_destroyable = ii_cb_destroyable ).
 
-    ro_instance = NEW #( i_element_name = iv_element_name ir_cb_destroyable = ii_cb_destroyable ).
+    ro_instance = NEW #( i_element_name    = iv_element_name
+                         ir_cb_destroyable = ii_cb_destroyable ).
 
     lo_controller->initialize( ir_parent_controller = COND #( WHEN ii_parent_view IS BOUND
-                                                                  THEN ii_parent_view->get_controller( ) )
+                                                              THEN ii_parent_view->get_controller( ) )
                                ir_view              = ro_instance
                                i_vcode              = iv_processing_mode ).
 
@@ -195,9 +177,8 @@ CLASS zcl_medapi_gv_sample_report IMPLEMENTATION.
 
   METHOD generate_model.
 
-    DATA:
-      lt_text    TYPE textpool_table,
-      lt_reports TYPE zmedapi_t_sample_report.
+    DATA lt_text    TYPE textpool_table.
+    DATA lt_reports TYPE zmedapi_t_sample_report.
 
     get_api( )->if_ishmed_api_documentation~get_program( IMPORTING et_value = DATA(lt_programs) ).
 
@@ -352,13 +333,15 @@ CLASS zcl_medapi_gv_sample_report IMPLEMENTATION.
             function_open_source_code( ).
 
           WHEN OTHERS.
-            r_cmdresult = super->_own_cmd( ir_grid_event = ir_grid_event ir_orig_request = ir_orig_request ).
+            r_cmdresult = super->_own_cmd( ir_grid_event   = ir_grid_event
+                                           ir_orig_request = ir_orig_request ).
             RETURN.
 
         ENDCASE.
 
       WHEN OTHERS.
-        r_cmdresult = super->_own_cmd( ir_grid_event = ir_grid_event ir_orig_request = ir_orig_request ).
+        r_cmdresult = super->_own_cmd( ir_grid_event   = ir_grid_event
+                                       ir_orig_request = ir_orig_request ).
         RETURN.
 
     ENDCASE.

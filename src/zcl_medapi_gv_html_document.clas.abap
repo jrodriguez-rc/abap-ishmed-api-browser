@@ -4,6 +4,7 @@ CLASS zcl_medapi_gv_html_document DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+
     CLASS-METHODS create_and_init_by_contview
       IMPORTING iv_element_name    TYPE n1gui_element_name
                 ii_cb_destroyable  TYPE REF TO if_ish_cb_destroyable     OPTIONAL
@@ -36,6 +37,7 @@ CLASS zcl_medapi_gv_html_document DEFINITION
       RAISING   cx_ish_static_handler.
 
   PROTECTED SECTION.
+
     METHODS initialize
       IMPORTING iv_document_object TYPE doku_obj                         OPTIONAL
                 iv_document_class  TYPE doku_id                          OPTIONAL
@@ -55,6 +57,7 @@ CLASS zcl_medapi_gv_html_document DEFINITION
     METHODS _refresh_display REDEFINITION.
 
   PRIVATE SECTION.
+
     DATA mv_document_object TYPE doku_obj.
     DATA mv_document_class  TYPE doku_id.
     DATA mo_html_viewer     TYPE REF TO cl_epss_html_viewer.

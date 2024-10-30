@@ -3,26 +3,24 @@ CLASS zcl_medapi_model DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+
     INTERFACES if_ish_gui_model.
     INTERFACES if_ish_gui_structure_model.
     INTERFACES if_ish_gui_treenode_model.
 
     METHODS constructor
-      IMPORTING
-        is_data TYPE zmedapi_s_list
-      RAISING
-        cx_ish_static_handler.
+      IMPORTING is_data TYPE zmedapi_s_list
+      RAISING   cx_ish_static_handler.
 
     METHODS get_api
-      RETURNING
-        VALUE(ri_result) TYPE REF TO if_ishmed_api.
+      RETURNING VALUE(ri_result) TYPE REF TO if_ishmed_api.
 
   PROTECTED SECTION.
 
   PRIVATE SECTION.
-    DATA:
-      mo_structdescr TYPE REF TO cl_abap_structdescr,
-      ms_data        TYPE zmedapi_s_list.
+
+    DATA mo_structdescr TYPE REF TO cl_abap_structdescr.
+    DATA ms_data        TYPE zmedapi_s_list.
 
 ENDCLASS.
 
@@ -33,8 +31,8 @@ CLASS zcl_medapi_model IMPLEMENTATION.
 
   METHOD constructor.
 
-    cl_abap_typedescr=>describe_by_data( EXPORTING p_data      = ms_data
-                                         RECEIVING p_descr_ref = DATA(lr_typedescr)
+    cl_abap_typedescr=>describe_by_data( EXPORTING  p_data      = ms_data
+                                         RECEIVING  p_descr_ref = DATA(lr_typedescr)
                                          EXCEPTIONS OTHERS      = 1 ).
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_ish_static_handler.
@@ -74,7 +72,8 @@ CLASS zcl_medapi_model IMPLEMENTATION.
 
   METHOD if_ish_gui_structure_model~get_supported_fields.
 
-    rt_supported_fieldname = VALUE #( FOR ls_component IN mo_structdescr->components ( ls_component-name ) ).
+    rt_supported_fieldname = VALUE #( FOR ls_component IN mo_structdescr->components
+                                      ( ls_component-name ) ).
 
   ENDMETHOD.
 
@@ -97,8 +96,8 @@ CLASS zcl_medapi_model IMPLEMENTATION.
 
     DATA(lt_changed_field) = VALUE ish_t_fieldname( ( i_fieldname ) ).
     RAISE EVENT if_ish_gui_structure_model~ev_changed
-      EXPORTING
-        et_changed_field = lt_changed_field.
+          EXPORTING
+            et_changed_field = lt_changed_field.
 
     r_changed = abap_true.
 
